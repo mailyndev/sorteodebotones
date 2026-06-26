@@ -180,6 +180,93 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 400);
     }
 
+    // --- Decoraciones de Fondo (Corazones y Perritos) ---
+    const decorationsContainer = document.getElementById('decorations-container');
+    const heartSymbols = ['❤️', '💖', '💝', '💕', '💘'];
+    
+    function spawnDecoration() {
+        if (!decorationsContainer) return;
+        
+        const isPuppy = Math.random() > 0.6; // 40% perritos, 60% corazones
+        const element = document.createElement('div');
+        element.classList.add('floating-element');
+        
+        if (isPuppy) {
+            element.classList.add('puppy');
+            const size = Math.random() * 40 + 40; // 40px a 80px
+            element.style.width = `${size}px`;
+            element.style.height = `${size}px`;
+            element.style.setProperty('--float-opacity', (Math.random() * 0.15 + 0.1).toFixed(2));
+        } else {
+            element.classList.add('heart');
+            element.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+            element.style.fontSize = `${Math.random() * 16 + 16}px`;
+            element.style.setProperty('--float-opacity', (Math.random() * 0.25 + 0.15).toFixed(2));
+        }
+        
+        element.style.left = `${Math.random() * 100}%`;
+        
+        const duration = Math.random() * 10 + 12;
+        element.style.animationDuration = `${duration}s`;
+        
+        element.style.setProperty('--float-sway', `${Math.random() * 120 - 60}px`);
+        element.style.setProperty('--float-rotation', `${Math.random() * 360 - 180}deg`);
+        
+        decorationsContainer.appendChild(element);
+        
+        setTimeout(() => {
+            element.remove();
+        }, duration * 1000);
+    }
+    
+    function initBackgroundDecorations() {
+        if (!decorationsContainer) return;
+        
+        // Generar 8 elementos iniciales a alturas aleatorias
+        for (let i = 0; i < 8; i++) {
+            setTimeout(() => {
+                const isPuppy = Math.random() > 0.6;
+                const element = document.createElement('div');
+                element.classList.add('floating-element');
+                
+                if (isPuppy) {
+                    element.classList.add('puppy');
+                    const size = Math.random() * 40 + 40;
+                    element.style.width = `${size}px`;
+                    element.style.height = `${size}px`;
+                    element.style.setProperty('--float-opacity', (Math.random() * 0.15 + 0.1).toFixed(2));
+                } else {
+                    element.classList.add('heart');
+                    element.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+                    element.style.fontSize = `${Math.random() * 16 + 16}px`;
+                    element.style.setProperty('--float-opacity', (Math.random() * 0.25 + 0.15).toFixed(2));
+                }
+                
+                element.style.left = `${Math.random() * 100}%`;
+                const startY = Math.random() * 100;
+                element.style.bottom = `${startY}vh`;
+                
+                const duration = Math.random() * 10 + 12;
+                const remainingDuration = duration * (1 - startY / 100);
+                element.style.animationDuration = `${remainingDuration}s`;
+                
+                element.style.setProperty('--float-sway', `${Math.random() * 120 - 60}px`);
+                element.style.setProperty('--float-rotation', `${Math.random() * 360 - 180}deg`);
+                
+                decorationsContainer.appendChild(element);
+                
+                setTimeout(() => {
+                    element.remove();
+                }, remainingDuration * 1000);
+            }, Math.random() * 200);
+        }
+        
+        // Spawnear nuevos elementos continuamente
+        setInterval(spawnDecoration, 2200);
+    }
+    
+    initBackgroundDecorations();
+
     // --- Listeners de Eventos ---
     btnRed.addEventListener('click', () => handleSelection('red'));
     btnBlue.addEventListener('click', () => handleSelection('blue'));

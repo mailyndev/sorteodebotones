@@ -1,0 +1,389 @@
+/* ==========================================================================
+   SISTEMA DE DISEÑO & VARIABLES
+   ========================================================================== */
+:root {
+    /* Paleta de Colores */
+    --color-bg-dark: #0a0c10;
+    --color-card-bg: rgba(255, 255, 255, 0.03);
+    --color-card-border: rgba(255, 255, 255, 0.08);
+    --color-text-main: #f3f4f6;
+    --color-text-muted: #9ca3af;
+    
+    /* Rojo de Destino */
+    --color-red: #ff3366;
+    --color-red-glow: rgba(255, 51, 102, 0.4);
+    
+    /* Azul de Destino */
+    --color-blue: #00ccff;
+    --color-blue-glow: rgba(0, 204, 255, 0.4);
+    
+    /* Estados del Sorteo */
+    --color-win: #10b981;
+    --color-win-glow: rgba(16, 185, 129, 0.4);
+    --color-lose: #ef4444;
+    --color-lose-glow: rgba(239, 68, 68, 0.4);
+    
+    /* Tipografía y Transición */
+    --font-primary: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==========================================================================
+   RESET & ESTILOS BASE
+   ========================================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-primary);
+    background-color: var(--color-bg-dark);
+    color: var(--color-text-main);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Confetti Canvas */
+#confetti-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10;
+}
+
+/* ==========================================================================
+   FONDOS Y EFECTOS DE LUZ
+   ========================================================================== */
+.background-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+    pointer-events: none;
+    z-index: 0;
+    filter: blur(80px);
+    animation: pulseGlow 10s infinite alternate ease-in-out;
+}
+
+@keyframes pulseGlow {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1.2);
+        opacity: 1;
+    }
+}
+
+/* ==========================================================================
+   CONTENEDOR PRINCIPAL (GLASSMORPHISM)
+   ========================================================================== */
+.container {
+    width: 100%;
+    max-width: 580px;
+    padding: 20px;
+    z-index: 1;
+}
+
+.card {
+    background: var(--color-card-bg);
+    border: 1px solid var(--color-card-border);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 28px;
+    padding: 48px 40px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    transition: var(--transition-smooth);
+    position: relative;
+    overflow: hidden;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+}
+
+.card-header {
+    margin-bottom: 40px;
+}
+
+.title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    background: linear-gradient(to right, #ffffff, #9ca3af);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 12px;
+}
+
+.subtitle {
+    font-size: 1rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    max-width: 90%;
+    margin: 0 auto;
+}
+
+/* ==========================================================================
+   BOTONES DE DESTINO
+   ========================================================================== */
+.selection-zone {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    transition: var(--transition-smooth);
+}
+
+.destiny-btn {
+    position: relative;
+    border: none;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+    border-radius: 20px;
+    outline: none;
+    transition: var(--transition-smooth);
+}
+
+.btn-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 36px 20px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    color: var(--color-text-main);
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: var(--transition-smooth);
+    z-index: 2;
+    position: relative;
+}
+
+.btn-icon {
+    font-size: 2rem;
+    transition: var(--transition-smooth);
+}
+
+.btn-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    opacity: 0;
+    transition: var(--transition-smooth);
+    z-index: 1;
+}
+
+/* Estilos Específicos de Botón Rojo */
+.btn-red:hover .btn-content {
+    background: rgba(255, 51, 102, 0.08);
+    border-color: var(--color-red);
+    color: #ffffff;
+    transform: translateY(-4px);
+}
+
+.btn-red:hover .btn-glow {
+    opacity: 1;
+    box-shadow: 0 0 30px var(--color-red-glow);
+}
+
+.btn-red:hover .btn-icon {
+    transform: scale(1.2);
+    filter: drop-shadow(0 0 10px var(--color-red));
+}
+
+.btn-red:active .btn-content {
+    transform: translateY(0) scale(0.97);
+}
+
+/* Estilos Específicos de Botón Azul */
+.btn-blue:hover .btn-content {
+    background: rgba(0, 204, 255, 0.08);
+    border-color: var(--color-blue);
+    color: #ffffff;
+    transform: translateY(-4px);
+}
+
+.btn-blue:hover .btn-glow {
+    opacity: 1;
+    box-shadow: 0 0 30px var(--color-blue-glow);
+}
+
+.btn-blue:hover .btn-icon {
+    transform: scale(1.2);
+    filter: drop-shadow(0 0 10px var(--color-blue));
+}
+
+.btn-blue:active .btn-content {
+    transform: translateY(0) scale(0.97);
+}
+
+/* ==========================================================================
+   SECCIÓN DE RESULTADOS
+   ========================================================================== */
+.result-zone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.result-message-container {
+    padding: 10px;
+}
+
+.result-title {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
+}
+
+.result-description {
+    font-size: 1.1rem;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+}
+
+/* Estilo Dinámico de Victoria / Derrota (Aplicados vía JS) */
+.card.win-state {
+    border-color: var(--color-win);
+    box-shadow: 0 0 50px rgba(16, 185, 129, 0.15);
+}
+
+.card.win-state .result-title {
+    color: var(--color-win);
+    text-shadow: 0 0 20px var(--color-win-glow);
+}
+
+.card.lose-state {
+    border-color: var(--color-lose);
+    box-shadow: 0 0 50px rgba(239, 68, 68, 0.15);
+    animation: shake 0.5s ease-in-out;
+}
+
+.card.lose-state .result-title {
+    color: var(--color-lose);
+    text-shadow: 0 0 20px var(--color-lose-glow);
+}
+
+/* Botón Volver a Jugar */
+.play-again-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: var(--color-text-main);
+    padding: 16px 32px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    outline: none;
+}
+
+.play-again-btn:hover {
+    background: #ffffff;
+    color: var(--color-bg-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.play-again-btn:hover .restart-icon {
+    transform: rotate(180deg);
+}
+
+.play-again-btn:active {
+    transform: translateY(0);
+}
+
+.restart-icon {
+    transition: transform 0.6s ease;
+    display: inline-block;
+}
+
+/* ==========================================================================
+   TRANSICIONES & ANIMACIONES
+   ========================================================================== */
+.hidden {
+    display: none !important;
+}
+
+.fade-out {
+    opacity: 0;
+    transform: scale(0.95);
+    pointer-events: none;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-8px); }
+    40%, 80% { transform: translateX(8px); }
+}
+
+/* ==========================================================================
+   RESPONSIVIDAD (MEDIA QUERIES)
+   ========================================================================== */
+@media (max-width: 480px) {
+    .card {
+        padding: 32px 20px;
+    }
+    
+    .title {
+        font-size: 2rem;
+    }
+    
+    .selection-zone {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    
+    .btn-content {
+        padding: 28px 16px;
+    }
+    
+    .result-title {
+        font-size: 2.2rem;
+    }
+}

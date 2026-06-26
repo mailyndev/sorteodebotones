@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elige tu destino</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Canvas para efectos de confeti al ganar -->
+    <canvas id="confetti-canvas"></canvas>
+
+    <div class="background-glow"></div>
+
+    <main class="container">
+        <div class="card" id="game-card">
+            <header class="card-header">
+                <h1 class="title">Elige tu destino</h1>
+                <p class="subtitle">Dos caminos ante ti. Uno lleva a la gloria, el otro al abismo. ¿Cuál elegirás?</p>
+            </header>
+
+            <!-- Zona de selección de destino -->
+            <div class="selection-zone" id="selection-zone">
+                <button class="destiny-btn btn-red" id="btn-red" aria-label="Destino Rojo">
+                    <span class="btn-glow"></span>
+                    <span class="btn-content">
+                        <span class="btn-icon">🔴</span>
+                        <span class="btn-text">Destino Rojo</span>
+                    </span>
+                </button>
+
+                <button class="destiny-btn btn-blue" id="btn-blue" aria-label="Destino Azul">
+                    <span class="btn-glow"></span>
+                    <span class="btn-content">
+                        <span class="btn-icon">🔵</span>
+                        <span class="btn-text">Destino Azul</span>
+                    </span>
+                </button>
+            </div>
+
+            <!-- Zona de resultados (oculta al inicio) -->
+            <div class="result-zone hidden" id="result-zone">
+                <div class="result-message-container">
+                    <h2 class="result-title" id="result-title">Has ganado</h2>
+                    <p class="result-description" id="result-description">El destino te sonríe hoy. ¡Has superado la prueba!</p>
+                </div>
+                <button class="play-again-btn" id="btn-restart">
+                    <span class="restart-icon">🔄</span> Volver a jugar
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
